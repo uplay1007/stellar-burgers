@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import '../../index.css';
@@ -21,13 +22,20 @@ import {
   Register,
   ResetPassword
 } from '@pages';
+import { fetchIngredients } from '@slices';
+import { useDispatch } from '../../services/store';
 
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const background = location.state?.background;
 
   const handleModalClose = () => navigate(-1);
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>
