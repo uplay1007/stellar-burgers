@@ -22,7 +22,7 @@ import {
   Register,
   ResetPassword
 } from '@pages';
-import { fetchIngredients } from '@slices';
+import { checkUserAuth, fetchIngredients } from '@slices';
 import { useDispatch } from '../../services/store';
 
 const App = () => {
@@ -35,6 +35,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
+    dispatch(checkUserAuth());
   }, [dispatch]);
 
   return (
