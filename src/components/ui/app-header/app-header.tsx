@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
 import styles from './app-header.module.css';
 import { TAppHeaderUIProps } from './type';
@@ -17,7 +18,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
           to='/'
           end
           className={({ isActive }) =>
-            `${styles.link} ${isActive ? styles.link_active : ''}`
+            clsx(styles.link, { [styles.link_active]: isActive })
           }
         >
           {({ isActive }) => (
@@ -32,7 +33,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
         <NavLink
           to='/feed'
           className={({ isActive }) =>
-            `${styles.link} ${isActive ? styles.link_active : ''}`
+            clsx(styles.link, { [styles.link_active]: isActive })
           }
         >
           {({ isActive }) => (
@@ -50,7 +51,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
         <NavLink
           to='/profile'
           className={({ isActive }) =>
-            `${styles.link} ${isActive ? styles.link_active : ''}`
+            clsx(styles.link, { [styles.link_active]: isActive })
           }
         >
           {({ isActive }) => (
