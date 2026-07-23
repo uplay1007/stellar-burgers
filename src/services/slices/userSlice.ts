@@ -7,6 +7,7 @@ import {
   getUserApi,
   loginUserApi,
   logoutApi,
+  refreshToken as refreshUserToken,
   registerUserApi,
   resetPasswordApi,
   updateUserApi
@@ -28,7 +29,10 @@ export const checkUserAuth = createAsyncThunk(
   'user/checkUserAuth',
   async () => {
     if (!getCookie('accessToken')) {
-      return null;
+      if (!localStorage.getItem('refreshToken')) {
+        return null;
+      }
+      await refreshUserToken();
     }
     const response = await getUserApi();
     return response.user;
