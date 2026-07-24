@@ -29,6 +29,7 @@ export const orderDetailsSlice = createSlice({
     builder
       .addCase(fetchOrderByNumber.pending, (state) => {
         state.isLoading = true;
+        state.order = null;
       })
       .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
         state.isLoading = false;
