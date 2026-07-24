@@ -5,6 +5,7 @@ import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
   selectConstructorItems,
+  selectOrderError,
   selectOrderModalData,
   selectOrderRequest,
   selectUser
@@ -18,6 +19,7 @@ export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(selectConstructorItems);
   const orderRequest = useSelector(selectOrderRequest);
   const orderModalData = useSelector(selectOrderModalData);
+  const error = useSelector(selectOrderError);
   const user = useSelector(selectUser);
 
   const onOrderClick = () => {
@@ -34,11 +36,11 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id
     ];
 
-    dispatch(createOrder(ingredientIds))
-      .unwrap()
-      .then(() => {
+    dispatch(createOrder(ingredientIds)).then((action) => {
+      if (createOrder.fulfilled.match(action)) {
         dispatch(clearConstructor());
-      });
+      }
+    });
   };
 
   const closeOrderModal = () => {
@@ -61,6 +63,7 @@ export const BurgerConstructor: FC = () => {
       orderRequest={orderRequest}
       constructorItems={constructorItems}
       orderModalData={orderModalData}
+      error={error}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
     />

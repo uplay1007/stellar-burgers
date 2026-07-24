@@ -5,3 +5,5 @@ export const selectOrderRequest = (state: RootState) =>
 
 export const selectOrderModalData = (state: RootState) =>
   state.order.orderModalData;
+
+export const selectOrderError = (state: RootState) => state.order.error;
