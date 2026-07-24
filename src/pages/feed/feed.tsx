@@ -10,8 +10,10 @@ export const Feed: FC = () => {
   const dispatch = useDispatch();
   const orders = useSelector(selectFeedOrders);
   const [reconnectKey, setReconnectKey] = useState(0);
+  const [connectionFailed, setConnectionFailed] = useState(false);
 
   useEffect(() => {
+    let isCancelled = false;
     const ws = new WebSocket(FEED_WS_URL);
 
     ws.onmessage = (event) => {
@@ -21,12 +23,29 @@ export const Feed: FC = () => {
       }
     };
 
-    return () => ws.close();
+    ws.onerror = () => {
+      if (!isCancelled) setConnectionFailed(true);
+    };
+
+    // Закрытие не по нашей инициативе (event.wasClean === false) означает,
+    // что соединение оборвалось само — например, сервер недоступен. Наше
+    // собственное закрытие в cleanup-функции ниже под это не подпадает.
+    ws.onclose = (event) => {
+      if (!isCancelled && !event.wasClean) setConnectionFailed(true);
+    };
+
+    return () => {
+      isCancelled = true;
+      ws.close();
+    };
   }, [dispatch, reconnectKey]);
 
-  const handleGetFeeds = () => setReconnectKey((key) => key + 1);
+  const handleGetFeeds = () => {
+    setConnectionFailed(false);
+    setReconnectKey((key) => key + 1);
+  };
 
-  if (!orders.length) {
+  if (!orders.length && !connectionFailed) {
     return <Preloader />;
   }
 
